@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Library Books</h1>
+        <div>
+            <a href="{% url 'add_book' %}" class="btn btn-primary">Add Book</a>
+            <a href="{% url 'borrowing_history' %}" class="btn btn-info">My History</a>
+            <a href="{% url 'check_overdue' %}" class="btn btn-warning">Check Overdue</a>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Available Copies</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.copies }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'reserve_book' book.id %}" class="btn btn-sm btn-info">Reserve</a>
+                            <a href="{% url 'borrow_book' book.id %}" class="btn btn-sm btn-success">Borrow</a>
+                            <a href="{% url 'delete_book' book.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No books available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 
